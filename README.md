@@ -1,119 +1,83 @@
+# Mesa de Honor — V2
 
-🥘 Mesa de Honor
-Montajes para eventos
+Rediseño estático para GitHub Pages con agenda compartida opcional mediante Google Sheets + Apps Script.
 
-Mesa de Honor ofrece la renta de bufeteras y equipo para crear una mesa de alimentos elegante, funcional y lista para tu celebración.
+## 1. Publicación rápida
 
-Nuestro servicio está pensado para cumpleaños, bodas, XV años, graduaciones, bautizos, eventos empresariales, reuniones familiares y todo tipo de celebraciones.
+Sube todo el contenido de esta carpeta a tu repositorio `mesadehonor` y activa GitHub Pages desde la rama principal.
 
-La idea es sencilla:
+La web funciona incluso sin backend: guarda solicitudes de prueba en `localStorage`.
 
-Tú eliges el evento. Nosotros ponemos la mesa.
+## 2. Activar agenda compartida gratis
 
-¿Qué puedes rentar?
+### Google Sheet
+1. Crea un Google Sheet.
+2. Abre **Extensiones > Apps Script**.
+3. Copia `apps-script/Code.gs`.
+4. Ejecuta `setup()` una vez.
+5. Implementa como **Aplicación web**.
+6. Ejecutar como: tú.
+7. Acceso: cualquier persona.
+8. Copia la URL `/exec`.
 
-Dependiendo del paquete contratado, puedes solicitar:
+### Conectar el sitio
+Abre `js/config.js` y cambia:
 
-🥘 Bufeteras de acero inoxidable
-🍽️ Insertos para alimentos
-🪑 Mesas de apoyo
-🧺 Mantelería
-🍴 Cucharones y pinzas
-🥤 Termos para bebidas
-✨ Accesorios para montaje
-🚚 Servicio de entrega
-🎀 Servicio de montaje, según disponibilidad
-📲 ¿Cómo funciona?
-1. Escanea o toca el NFC
+```js
+apiUrl: ""
+```
 
-El cliente acerca su celular a la zona NFC de Mesa de Honor.
+por:
 
-Automáticamente se abre la página de reservaciones.
+```js
+apiUrl: "https://script.google.com/macros/s/TU_ID/exec"
+```
 
-Sin descargar aplicaciones.
+Cambia también:
 
-2. Consulta la fecha
+```js
+whatsapp: "5210000000000"
+```
 
-El cliente selecciona:
+por tu WhatsApp.
 
-📅 Fecha de entrega
+## 3. Personalización
 
-📅 Fecha del evento
+Los paquetes, extras, precios, horarios y costo de entrega están en `js/config.js`.
 
-⏰ Horario de entrega
+Puedes modificar:
+- nombre
+- WhatsApp
+- costo de entrega
+- horarios
+- paquetes
+- extras
 
-Los horarios se manejan en bloques de 1 hora, para organizar correctamente las entregas y evitar cruces de servicios.
+## 4. Flujo
 
-3. Selecciona su paquete
+Cliente → GitHub Pages → Apps Script → Google Sheets → WhatsApp.
 
-Puede elegir entre diferentes opciones:
+El Apps Script usa `LockService` para reducir el riesgo de que dos clientes soliciten simultáneamente el mismo horario.
 
-Esencial
-Para reuniones pequeñas.
+## 5. Importante
 
-Celebración
-Para eventos familiares y celebraciones.
+Esta versión maneja solicitudes de reservación; no almacena tarjetas ni procesa pagos.
 
-Gran Evento
-Para bodas, graduaciones, XV años y eventos de mayor tamaño.
+Para producción conviene añadir autenticación al panel administrativo y políticas de privacidad antes de almacenar datos personales de clientes.
 
-También puede agregar extras.
+## Estructura
 
-4. Personaliza su solicitud
-
-El cliente indica:
-
-Tipo de evento
-Número de invitados
-Dirección
-Datos de contacto
-Equipo adicional
-Necesidades especiales
-Notas para la entrega
-
-El sistema calcula automáticamente el total estimado de la renta.
-
-5. Genera su solicitud
-
-Al presionar:
-
-📲 SOLICITAR RESERVACIÓN
-
-el sistema prepara automáticamente un mensaje de WhatsApp con toda la información:
-
-Folio: MH-XXXXXXX
-📅 Fecha de entrega
-⏰ Horario
-🎉 Tipo de evento
-🥘 Paquete seleccionado
-➕ Extras
-👥 Número de invitados
-📍 Dirección
-💰 Total estimado
-
-Así el cliente no tiene que escribir toda la información manualmente.
-
-6. Mesa de Honor confirma
-
-La solicitud llega por WhatsApp y el equipo puede revisar:
-
-Disponibilidad + equipo + fecha + ubicación + condiciones de renta.
-
-Una vez revisada, se confirma la reservación y se pueden establecer las condiciones de pago y entrega.
-
-✨ Propuesta de valor
-
-Mesa de Honor no solo renta bufeteras.
-
-Ayuda a que la mesa de alimentos de tu evento tenga una presentación elegante, ordenada y profesional, sin que tengas que comprar todo el equipo para una celebración que utilizarás ocasionalmente.
-
-Ideal para:
-
-🎓 Graduaciones
-💍 Bodas
-🎂 Cumpleaños
-👑 XV años
-👶 Bautizos
-🏢 Eventos empresariales
-🥂 Reuniones sociales
-🎉 Celebraciones familiares
+```text
+mesadehonor/
+├── index.html
+├── admin.html
+├── css/
+│   └── styles.css
+├── js/
+│   ├── config.js
+│   └── app.js
+├── img/
+├── apps-script/
+│   └── Code.gs
+└── README.md
+```

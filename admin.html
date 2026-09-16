@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mesa de Honor | Admin</title><link rel="stylesheet" href="css/styles.css"></head>
+<body><header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">MH</span><span>MESA DE HONOR<small>ADMINISTRACIÓN</small></span></a><a class="header-cta" href="index.html">Ver sitio</a></header>
+<main class="section"><div class="section-head"><div><p class="eyebrow">PANEL</p><h2>Reservaciones</h2></div><button id="refresh" class="btn btn-dark">Actualizar</button></div>
+<div id="stats" class="stats"></div><div class="booking-form" style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr><th align="left">Folio</th><th align="left">Fecha</th><th align="left">Hora</th><th align="left">Cliente</th><th align="left">Evento</th><th align="left">Total</th><th align="left">Estado</th></tr></thead><tbody id="rows"></tbody></table></div></main>
+<script src="js/config.js"></script><script>
+const C=window.MH_CONFIG,$=x=>document.getElementById(x),money=n=>new Intl.NumberFormat("es-MX",{style:"currency",currency:"MXN",maximumFractionDigits:0}).format(n);
+async function load(){let data={};if(C.apiUrl){try{data=await (await fetch(C.apiUrl+"?action=reservations")).json()}catch{}}else data=JSON.parse(localStorage.getItem("mh_demo_reservations")||"{}");
+let arr=Object.values(data),pending=arr.filter(x=>x.status==="PENDIENTE").length,confirmed=arr.filter(x=>x.status==="CONFIRMADA").length,total=arr.reduce((a,x)=>a+Number(x.total||0),0);
+$("stats").innerHTML=`<div><b>${arr.length}</b><span>Total</span></div><div><b>${pending}</b><span>Pendientes</span></div><div><b>${confirmed}</b><span>Confirmadas</span></div><div><b>${money(total)}</b><span>Total estimado</span></div>`;
+$("rows").innerHTML=arr.sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt))).map(x=>`<tr><td>${x.folio}</td><td>${x.deliveryDate}</td><td>${x.time}</td><td>${x.name}</td><td>${x.eventType}</td><td>${money(x.total)}</td><td>${x.status}</td></tr>`).join("")||`<tr><td colspan="7" style="padding:30px;color:#777">Sin reservaciones todavía.</td></tr>`}
+$("refresh").onclick=load;load();
+</script></body></html>
